@@ -1,1 +1,5 @@
 assetfinder
+*.sw*
+*.tgz
+*.zip
+*.exe
