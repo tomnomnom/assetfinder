@@ -1,5 +1,7 @@
 # assetfinder
 
+Find domains and subdomains related to a given domain.
+
 ## Install
 
 If you have Go installed and configured (i.e. with `$GOPATH/bin` in your `$PATH`):
@@ -42,6 +44,6 @@ Please feel free to issue pull requests with new sources! :)
 * https://certdb.com/api-documentation
 
 ## TODO
-* Flags to control which sources are used 
+* Flags to control which sources are used
     * Likely to be all on by default and a flag to disable
 * Read domains from stdin
