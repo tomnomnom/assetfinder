@@ -13,42 +13,41 @@ func fetchFindSubDomains(domain string) ([]string, error) {
 		return []string{}, nil
 	}
 
-	fetchURL := fmt.Sprintf(
-		"https://api.spyse.com/v1/subdomains-aggregate?api_token=%s&domain=%s",
-		apiToken, domain,
-	)
-
+	// Start querying the Spyse API from page 1
+	page := 1
 	out := make([]string, 0)
 
-	type Cidr struct {
-		Results []struct {
-			Data struct {
-				Domains []string `json:"domains"`
-			} `json:"data"`
-		} `json:"results"`
-	}
-
-	type Cidrs struct {
-		Cidr16, Cidr24 Cidr
-	}
-
-	wrapper := struct {
-		Cidrs Cidrs `json:"cidr"`
-	}{}
+	for {
+		wrapper := struct {
+			Records []struct {
+				Domain string `json:"domain"`
+			} `json:"records"`
+		}{}
+		
+		fetchURL := fmt.Sprintf(
+			"https://api.spyse.com/v1/subdomains?api_token=%s&domain=%s&page=%d",
+			apiToken, domain, page,
+		)
 	
+		err := fetchJSON(fetchURL, &wrapper)	
+		if err != nil {
+			return out, err
+		}
+
+		// The API does not respond with any paging, nor does it give us any idea of
+		// the total amount of domains, so we just have to keep asking for a new page until
+		// the returned `records` array is empty
+		// NOTE: The free tier always gives you the first page for free, and you get "25 unlimited search requests"
+		if len(wrapper.Records) == 0 {
+			break
+		}
+
+		for _, record := range wrapper.Records {
+			out = append(out, record.Domain)
+		}
+
+		page++
+	}
 	
-	err := fetchJSON(fetchURL, &wrapper)
-
-	for _, result := range wrapper.Cidrs.Cidr16.Results {
-		for _, domain := range result.Data.Domains {
-			out = append(out, domain)
-		}
-	}
-	for _, result := range wrapper.Cidrs.Cidr24.Results {
-		for _, domain := range result.Data.Domains {
-			out = append(out, domain)
-		}
-	}
-
-	return out, err
+	return out, nil
 }
