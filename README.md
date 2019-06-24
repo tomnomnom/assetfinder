@@ -34,10 +34,11 @@ Please feel free to issue pull requests with new sources! :)
     * You need to be careful with your app's rate limits
 * virustotal
     * Needs `VT_API_KEY` environment variable set
+* findsubdomains
+    * Needs `SPYSE_API_TOKEN` environment variable set
 
 ### Sources to be implemented
 * http://api.passivetotal.org/api/docs/
-* https://findsubdomains.com
 * https://community.riskiq.com/ (?)
 * https://riddler.io/
 * http://www.dnsdb.org/
