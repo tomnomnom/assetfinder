@@ -1,14 +1,17 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strings"
 	"sync"
+	"time"
 )
 
 func main() {
@@ -16,12 +19,13 @@ func main() {
 	flag.BoolVar(&subsOnly, "subs-only", false, "Only incluse subdomains of search domain")
 	flag.Parse()
 
+	var domains io.Reader
+	domains = os.Stdin
+
 	domain := flag.Arg(0)
-	if domain == "" {
-		fmt.Println("no domain specified")
-		return
+	if domain != "" {
+		domains = strings.NewReader(domain)
 	}
-	domain = strings.ToLower(domain)
 
 	sources := []fetchFn{
 		fetchCertSpotter,
@@ -36,25 +40,33 @@ func main() {
 	out := make(chan string)
 	var wg sync.WaitGroup
 
-	// call each of the source workers in a goroutine
-	for _, source := range sources {
-		wg.Add(1)
-		fn := source
+	sc := bufio.NewScanner(domains)
+	rl := newRateLimiter(time.Second)
 
-		go func() {
-			defer wg.Done()
+	for sc.Scan() {
+		domain := strings.ToLower(sc.Text())
 
-			names, err := fn(domain)
+		// call each of the source workers in a goroutine
+		for _, source := range sources {
+			wg.Add(1)
+			fn := source
 
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "err: %s\n", err)
-				return
-			}
+			go func() {
+				defer wg.Done()
 
-			for _, n := range names {
-				out <- n
-			}
-		}()
+				rl.Block(fmt.Sprintf("%#v", fn))
+				names, err := fn(domain)
+
+				if err != nil {
+					//fmt.Fprintf(os.Stderr, "err: %s\n", err)
+					return
+				}
+
+				for _, n := range names {
+					out <- n
+				}
+			}()
+		}
 	}
 
 	// close the output channel when all the workers are done
