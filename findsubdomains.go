@@ -26,7 +26,6 @@ func fetchFindSubDomains(domain string) ([]string, error) {
 				Domains []string `json:"domains"`
 			} `json:"data"`
 		} `json:"results"`
-		Count int `json:"count"`
 	}
 
 	type Cidrs struct {
