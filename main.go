@@ -31,6 +31,7 @@ func main() {
 		fetchFacebook,
 		//fetchWayback, // A little too slow :(
 		fetchVirusTotal,
+		fetchFindSubDomains,
 	}
 
 	out := make(chan string)
