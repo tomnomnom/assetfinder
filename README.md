@@ -1,6 +1,7 @@
 # assetfinder
 
-Find domains and subdomains related to a given domain.
+Find domains and subdomains potentially related to a given domain.
+
 
 ## Install
 

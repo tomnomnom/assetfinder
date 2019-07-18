@@ -16,7 +16,7 @@ import (
 
 func main() {
 	var subsOnly bool
-	flag.BoolVar(&subsOnly, "subs-only", false, "Only incluse subdomains of search domain")
+	flag.BoolVar(&subsOnly, "subs-only", false, "Only include subdomains of search domain")
 	flag.Parse()
 
 	var domains io.Reader
@@ -36,6 +36,7 @@ func main() {
 		//fetchWayback, // A little too slow :(
 		fetchVirusTotal,
 		fetchFindSubDomains,
+		fetchUrlscan,
 	}
 
 	out := make(chan string)
