@@ -37,6 +37,7 @@ func main() {
 		fetchVirusTotal,
 		fetchFindSubDomains,
 		fetchUrlscan,
+		fetchBufferOverrun,
 	}
 
 	out := make(chan string)
