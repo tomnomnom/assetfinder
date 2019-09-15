@@ -3,10 +3,17 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 )
 
+type CrtShResult struct {
+	Name string `json:"name_value"`
+}
+
 func fetchCrtSh(domain string) ([]string, error) {
+	var results []CrtShResult
+
 	resp, err := http.Get(
 		fmt.Sprintf("https://crt.sh/?q=%%25.%s&output=json", domain),
 	)
@@ -17,22 +24,14 @@ func fetchCrtSh(domain string) ([]string, error) {
 
 	output := make([]string, 0)
 
-	dec := json.NewDecoder(resp.Body)
+	body, _ := ioutil.ReadAll(resp.Body)
 
-	// The crt.sh API is a little funky... It returns multiple
-	// JSON objects with no delimiter, so you just have to keep
-	// attempting a decode until you hit EOF
-	for {
-		wrapper := struct {
-			Name string `json:"name_value"`
-		}{}
+	if err := json.Unmarshal(body, &results); err != nil {
+		return []string{}, err
+	}
 
-		err := dec.Decode(&wrapper)
-		if err != nil {
-			break
-		}
-
-		output = append(output, wrapper.Name)
+	for _, res := range results {
+		output = append(output, res.Name)
 	}
 	return output, nil
 }
