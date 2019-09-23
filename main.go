@@ -22,6 +22,12 @@ func main() {
 	var domains io.Reader
 	domains = os.Stdin
 
+	if flag.Arg(0) == "" {
+		fmt.Println("Looks like you didn't pass any domains")
+		fmt.Println("USAGE: assetfinder [--subs-only] <domain>")
+		os.Exit(2)
+	}
+
 	domain := flag.Arg(0)
 	if domain != "" {
 		domains = strings.NewReader(domain)
