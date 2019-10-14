@@ -86,8 +86,9 @@ func main() {
 		if _, ok := printed[n]; ok {
 			continue
 		}
+		// we only want subs and this isn't a sub
 		if subsOnly && !strings.HasSuffix(n, domain) {
-			continue
+			return
 		}
 		fmt.Println(n)
 		printed[n] = true
