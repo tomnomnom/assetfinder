@@ -14,6 +14,18 @@ go get -u github.com/tomnomnom/assetfinder
 Otherwise [download a release for your platform](https://github.com/tomnomnom/assetfinder/releases).
 To make it easier to execute you can put the binary in your `$PATH`.
 
+### Install on Arch Linux
+
+If you are using Arch Linux feel free to use this AUR.
+
+https://aur.archlinux.org/packages/assetfinder/
+
+```
+git clone https://aur.archlinux.org/assetfinder.git
+cd assetfinder
+makepkg -sri
+```
+
 ## Usage
 
 ```
