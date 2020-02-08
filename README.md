@@ -18,11 +18,24 @@ To make it easier to execute you can put the binary in your `$PATH`.
 
 If you are using Arch Linux feel free to use this AUR.
 
+#### Release
+
 https://aur.archlinux.org/packages/assetfinder/
 
 ```
 git clone https://aur.archlinux.org/assetfinder.git
 cd assetfinder
+makepkg -sri
+```
+
+#### Install directly by go from git
+
+
+https://aur.archlinux.org/packages/assetfinder-git/
+
+```
+git clone https://aur.archlinux.org/assetfinder-git.git
+cd assetfinder-git
 makepkg -sri
 ```
 
