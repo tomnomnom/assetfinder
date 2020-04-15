@@ -66,6 +66,10 @@ func main() {
 				}
 
 				for _, n := range names {
+					n = cleanDomain(n)
+					if subsOnly && !strings.HasSuffix(n, domain) {
+						continue
+					}
 					out <- n
 				}
 			}()
@@ -82,15 +86,12 @@ func main() {
 	printed := make(map[string]bool)
 
 	for n := range out {
-		n = cleanDomain(n)
 		if _, ok := printed[n]; ok {
 			continue
 		}
-		if subsOnly && !strings.HasSuffix(n, domain) {
-			continue
-		}
-		fmt.Println(n)
 		printed[n] = true
+
+		fmt.Println(n)
 	}
 }
 
