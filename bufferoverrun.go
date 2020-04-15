@@ -20,6 +20,9 @@ func fetchBufferOverrun(domain string) ([]string, error) {
 
 	for _, r := range wrapper.Records {
 		parts := strings.SplitN(r, ",", 2)
+		if len(parts) != 2 {
+			continue
+		}
 		out = append(out, parts[1])
 	}
 
