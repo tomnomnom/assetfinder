@@ -29,7 +29,7 @@ Please feel free to issue pull requests with new sources! :)
 * certspotter
 * hackertarget
 * threatcrowd
-* wayback machine
+* wayback machine (Make sure to uncomment [#L36](https://github.com/tomnomnom/assetfinder/blob/master/main.go#L36) to enable)
 * dns.bufferover.run
 * facebook
     * Needs `FB_APP_ID` and `FB_APP_SECRET` environment variables set (https://developers.facebook.com/)
