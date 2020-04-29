@@ -3,3 +3,4 @@ assetfinder
 *.tgz
 *.zip
 *.exe
+/.idea
