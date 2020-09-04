@@ -17,6 +17,7 @@ import (
 func main() {
 	var subsOnly bool
 	flag.BoolVar(&subsOnly, "subs-only", false, "Only include subdomains of search domain")
+	flag.BoolVar(&withWayback, "with-wayback", false, "Enable wayback machine. This may cause slowness")
 	flag.Parse()
 
 	var domains io.Reader
@@ -26,18 +27,32 @@ func main() {
 	if domain != "" {
 		domains = strings.NewReader(domain)
 	}
-
-	sources := []fetchFn{
-		fetchCertSpotter,
-		fetchHackerTarget,
-		fetchThreatCrowd,
-		fetchCrtSh,
-		fetchFacebook,
-		//fetchWayback, // A little too slow :(
-		fetchVirusTotal,
-		fetchFindSubDomains,
-		fetchUrlscan,
-		fetchBufferOverrun,
+	if !withWayback {
+		sources := []fetchFn{
+			fetchCertSpotter,
+			fetchHackerTarget,
+			fetchThreatCrowd,
+			fetchCrtSh,
+			fetchFacebook,
+			fetchVirusTotal,
+			fetchFindSubDomains,
+			fetchUrlscan,
+			fetchBufferOverrun,
+		}
+	}
+	if withWayback {
+		sources := []fetchFn{
+			fetchCertSpotter,
+			fetchHackerTarget,
+			fetchThreatCrowd,
+			fetchCrtSh,
+			fetchFacebook,
+			fetchWayback,
+			fetchVirusTotal,
+			fetchFindSubDomains,
+			fetchUrlscan,
+			fetchBufferOverrun,
+		}
 	}
 
 	out := make(chan string)

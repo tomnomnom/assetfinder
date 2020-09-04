@@ -30,6 +30,7 @@ Please feel free to issue pull requests with new sources! :)
 * hackertarget
 * threatcrowd
 * wayback machine
+	* Needs `--with-wayback true`
 * dns.bufferover.run
 * facebook
     * Needs `FB_APP_ID` and `FB_APP_SECRET` environment variables set
