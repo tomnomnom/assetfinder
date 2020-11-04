@@ -16,7 +16,22 @@ import (
 
 func main() {
 	var subsOnly bool
-	flag.BoolVar(&subsOnly, "subs-only", false, "Only include subdomains of search domain")
+    override := make(map[string]*bool)
+
+    flag.BoolVar(&subsOnly, "subs-only", false, "Only include subdomains of search domain")
+
+    // Flag for all Modules... Sorry Little messy
+    override["fetchCertSpotter"] = flag.Bool("certspotter", true, "<Boolean> (Default = True) Toggle CertSpotter source")
+    override["fetchHackerTarget"] = flag.Bool("hackertarget", true, "<Boolean> (Default = True) Toggle CertSpotter source")
+    override["fetchThreatCrowd"] = flag.Bool("threatcrowd", true, "<Boolean> (Default = True) Toggle ThreatCrowd source")
+    override["fetchCrtSh"] = flag.Bool("crtsh", true, "<Boolean> (Default = True) Toggle CrtSh source")
+    override["fetchFacebook"] = flag.Bool("facebook", true, "<Boolean> (Default = True) Toggle Facebook source")
+    override["fetchPassiveTotal"] = flag.Bool("passivetotal", true, "<Boolean> (Default = True) Toggle PassiveTotal source")
+    override["fetchWayback"] = flag.Bool("wayback", false, "<Boolean> (Default = False)  Toggle Wayback source")
+    override["fetchVirusTotal"] = flag.Bool("virustotal", true, "<Boolean> (Default = True) Toggle VirusTotal source")
+    override["fetchFindSubDomains"] = flag.Bool("findsubdomains", true, "<Boolean> (Default = True) Toggle FindSubDomains source")
+    override["fetchUrlscan"] = flag.Bool("urlscan", true, "<Boolean> (Default = True) Toggle Urlscan source")
+    override["fetchBufferOverrun"] = flag.Bool("bufferoverrun", true, "<Boolean> (Default = True) Toggle BufferOverrun source")
 	flag.Parse()
 
 	var domains io.Reader
@@ -27,18 +42,21 @@ func main() {
 		domains = strings.NewReader(domain)
 	}
 
-	sources := []fetchFn{
-		fetchCertSpotter,
-		fetchHackerTarget,
-		fetchThreatCrowd,
-		fetchCrtSh,
-		fetchFacebook,
-		//fetchWayback, // A little too slow :(
-		fetchVirusTotal,
-		fetchFindSubDomains,
-		fetchUrlscan,
-		fetchBufferOverrun,
+    sources := []fetchFn{
+        fetchCertSpotter,
+        fetchHackerTarget,
+        fetchThreatCrowd,
+        fetchCrtSh,
+        fetchFacebook,
+        fetchPassiveTotal,
+        fetchWayback, // A little too slow :(
+        fetchVirusTotal,
+        fetchFindSubDomains,
+        fetchUrlscan,
+        fetchBufferOverrun,
 	}
+
+    sources = toggleSources(override, sources)//Toogle Sources according flags
 
 	out := make(chan string)
 	var wg sync.WaitGroup
@@ -54,7 +72,7 @@ func main() {
 			wg.Add(1)
 			fn := source
 
-			go func() {
+            go func() {
 				defer wg.Done()
 
 				rl.Block(fmt.Sprintf("%#v", fn))
