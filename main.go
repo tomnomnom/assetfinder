@@ -34,6 +34,8 @@ func main() {
 		fetchCrtSh,
 		fetchFacebook,
 		//fetchWayback, // A little too slow :(
+        //fetchDNSDBCommunity, // Per Hour only 4 domains as Community Edition has limit of 25 query per hour and each domain takes 6 request for complete result for community edition See=>dnsdbCommunity.go Line 13
+        fetchDNSDB,
 		fetchVirusTotal,
 		fetchFindSubDomains,
 		fetchUrlscan,
