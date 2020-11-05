@@ -1,12 +1,11 @@
 package main
 
 import (
-    "time"
 	"encoding/json"
 	"fmt"
-	"net/http"
-	"io/ioutil"
-	"strings"
+	//"net/http"
+	//"io/ioutil"
+	//"strings"
 )
 
 func getDNSDBCommunity (domain string) ([]byte, error){
@@ -32,52 +31,57 @@ func getDNSDBCommunity (domain string) ([]byte, error){
     return formatJSON(body), nil
     }
 
-
-// Function to send Request to DNSDB
-func reqDNSDB (url string) (string,error) {
-    apikey := "" 
-    if apikey == "" {
-        return "",nil
-    }
-
-    req,err := http.NewRequest("GET", url, nil)
-    if err != nil{
-        return "", err
-    }
-
-    req.Header.Set("X-API-Key",apikey)
-    req.Header.Set("Accept", "*/*")
-
-    resp, err := http.DefaultClient.Do(req)
-    if err != nil{
-        return "", err
-    }
-    defer resp.Body.Close()
-
-    body, err := ioutil.ReadAll(resp.Body)
-    //body, err := ioutil.ReadFile("data")
-    if err != nil{
-        return "", err
-    }
-    bodySlice :=strings.Split(string(body), "\n")
-    if len(bodySlice)!=2{
-        bodystr := strings.Join(bodySlice[1:len(bodySlice)-2],"")
-        return bodystr, nil
-    }
-    bodystr :=""
-    return bodystr, nil
-}
-
-
-//Had to do it because couldn't Unmarshal it 
-func formatJSON (bodystr string) []byte{
-    occurence := strings.Count(bodystr,"]}}")
-    bodystr = strings.Replace(bodystr,"]}}","]}},\n",occurence-1)
-    body := []byte(bodystr)
-    body = append([]byte("["),body...)
-    body = append(body, []byte("]")...)
-    return body
-}
+//=================================
+// ====>FUNCTION FROM dnsdb.go<====
+//=================================
+//// Function to send Request to DNSDB
+//func reqDNSDB (url string) (string,error) {
+//    apikey := "" 
+//    if apikey == "" {
+//        return "",nil
+//    }
+//
+//    req,err := http.NewRequest("GET", url, nil)
+//    if err != nil{
+//        return "", err
+//    }
+//
+//    req.Header.Set("X-API-Key",apikey)
+//    req.Header.Set("Accept", "*/*")
+//
+//    resp, err := http.DefaultClient.Do(req)
+//    if err != nil{
+//        return "", err
+//    }
+//    defer resp.Body.Close()
+//
+//    body, err := ioutil.ReadAll(resp.Body)
+//    //body, err := ioutil.ReadFile("data")
+//    if err != nil{
+//        return "", err
+//    }
+//    bodySlice :=strings.Split(string(body), "\n")
+//    if len(bodySlice)!=2{
+//        bodystr := strings.Join(bodySlice[1:len(bodySlice)-2],"")
+//        return bodystr, nil
+//    }
+//    bodystr :=""
+//    return bodystr, nil
+//}
+//
+//
+//=================================
+// ====>FUNCTION FROM dnsdb.go<====
+//=================================
+////Had to do it because couldn't Unmarshal it 
+//func formatJSON (bodystr string) []byte{
+//    occurence := strings.Count(bodystr,"]}}")
+//    bodystr = strings.Replace(bodystr,"]}}","]}},\n",occurence-1)
+//    body := []byte(bodystr)
+//    body = append([]byte("["),body...)
+//    body = append(body, []byte("]")...)
+//    return body
+//}
 
 func fetchDNSDBCommunity (domain string) ([]string, error){
     body, _ := getDNSDBCommunity(domain)
@@ -103,7 +107,10 @@ func fetchDNSDBCommunity (domain string) ([]string, error){
                 continue
             }
             domainRepeatCheck[objelement.Obj.Rrname]= true
-            domains = append(domains,objelement.Obj.Rrname)
+
+            tempvar := []byte(objelement.Obj.Rrname) // Removing trailing '.' from subdomains Eg: "www.tesla.com."
+            tempvar = tempvar[:len(tempvar)-2]  // Removing trailing '.' from subdomains Eg: "www.tesla.com."
+            domains = append(domains,string(tempvar))
         }
     return domains, nil
 }
