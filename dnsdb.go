@@ -22,7 +22,7 @@ func getDNSDB (domain string) ([]byte, error){
 
 // Function to send Request to DNSDB
 func reqDNSDB (url string) (string,error) {
-    apikey := ""
+    apikey := cfg.Credentials.DNSDB.APIKey
     // Failing silently if no API Key
     if apikey == "" {
         return "",nil

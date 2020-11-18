@@ -9,8 +9,8 @@ import (
 
 func fetchPassiveTotal (domain string) ([]string,error){
     url := fmt.Sprintf("https://api.passivetotal.org/v2/enrichment/subdomains?query=%s",domain)
-    username := ""
-    secret := ""
+    username := cfg.Credentials.PassiveTotal.Username
+    secret := cfg.Credentials.PassiveTotal.Secret
     if username=="" || secret == ""{
         return []string{}, nil
     }

@@ -1,0 +1,34 @@
+flags:
+    BufferOverrun: true
+    CertSpotter: true
+    CrtSh: true
+    DNSDBCommunity: false # Per Hour only 4 domains as Community Edition has limit of 25 query per hour and each domain takes 6 request for complete result for community edition See=>dnsdbCommunity.go Line 13
+    DNSDB: true
+    Facebook: true
+    FindSubDomains: true
+    HackerTarget: true
+    PassiveTotal: true
+    subs-only: true
+    ThreatCrowd: true
+    Urlscan: true
+    VirusTotal: true
+    Wayback: false # A little too slow :(
+
+credentials:
+    dnsdb:
+        api-key: ""
+    
+    facebook:
+        app-id: ""
+        app-secret: ""
+    
+    spyse:
+        api-token: ""
+    
+    passivetotal:
+        username: ""
+        secret: ""
+    
+    virustotal:
+        api-key: ""
+    
