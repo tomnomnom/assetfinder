@@ -16,24 +16,24 @@ import (
 
 func main() {
 	var subsOnly bool
-    override := make(map[string]*bool)
+	override := make(map[string]*bool)
 
 	flag.BoolVar(&subsOnly, "subs-only", false, "Only include subdomains of search domain")
 
 	// Flag for all Modules... Sorry Little messy
-    	override["fetchCertSpotter"]    = flag.Bool("cert", true, "<Boolean>  Toggle CertSpotter source")
-    	override["fetchHackerTarget"]   = flag.Bool("ht", true, "<Boolean>  Toggle HackerTarget source")
-    	override["fetchThreatCrowd"]    = flag.Bool("t", true, "<Boolean>  Toggle ThreatCrowd source")
-    	override["fetchCrtSh"]          = flag.Bool("crt", true, "<Boolean>  Toggle CrtSh source")
-    	override["fetchDNSDB"]          = flag.Bool("d", false, "<Boolean>  Toggle DNSDB Enterprise source")
-    	override["fetchDNSDBCommunity"] = flag.Bool("dC", true, "<Boolean>  Toggle DNSDB Community source")
-    	override["fetchFacebook"]       = flag.Bool("f", true, "<Boolean>  Toggle Facebook source")
-    	override["fetchPassiveTotal"]   = flag.Bool("p", true, "<Boolean>  Toggle PassiveTotal source")
-    	override["fetchWayback"]        = flag.Bool("w", false, "<Boolean>  Toggle Wayback source")
-    	override["fetchVirusTotal"]     = flag.Bool("v", true, "<Boolean>  Toggle VirusTotal source")
-    	override["fetchFindSubDomains"] = flag.Bool("fs", true, "<Boolean>  Toggle FindSubDomains source")
-    	override["fetchUrlscan"]        = flag.Bool("u", true, "<Boolean>  Toggle Urlscan source")
-    	override["fetchBufferOverrun"]  = flag.Bool("b", true, "<Boolean>  Toggle BufferOverrun source")
+	override["fetchCertSpotter"]    = flag.Bool("cert", true, "<Boolean>  Toggle CertSpotter source")
+	override["fetchHackerTarget"]   = flag.Bool("ht", true, "<Boolean>  Toggle HackerTarget source")
+	override["fetchThreatCrowd"]    = flag.Bool("t", true, "<Boolean>  Toggle ThreatCrowd source")
+	override["fetchCrtSh"]          = flag.Bool("crt", true, "<Boolean>  Toggle CrtSh source")
+	override["fetchDNSDB"]          = flag.Bool("d", false, "<Boolean>  Toggle DNSDB Enterprise source")
+	override["fetchDNSDBCommunity"] = flag.Bool("dC", true, "<Boolean>  Toggle DNSDB Community source")
+	override["fetchFacebook"]       = flag.Bool("f", true, "<Boolean>  Toggle Facebook source")
+	override["fetchPassiveTotal"]   = flag.Bool("p", true, "<Boolean>  Toggle PassiveTotal source")
+	override["fetchWayback"]        = flag.Bool("w", false, "<Boolean>  Toggle Wayback source")
+	override["fetchVirusTotal"]     = flag.Bool("v", true, "<Boolean>  Toggle VirusTotal source")
+	override["fetchFindSubDomains"] = flag.Bool("fs", true, "<Boolean>  Toggle FindSubDomains source")
+	override["fetchUrlscan"]        = flag.Bool("u", true, "<Boolean>  Toggle Urlscan source")
+	override["fetchBufferOverrun"]  = flag.Bool("b", true, "<Boolean>  Toggle BufferOverrun source")
 	flag.Parse()
 
 	var domains io.Reader
@@ -52,15 +52,15 @@ func main() {
 		fetchFacebook,
 		//fetchWayback, // A little too slow :(
 		fetchDNSDBCommunity, // Per Hour only 4 domains as Community Edition has limit of 25 query per hour and each domain takes 6 request for complete result for community edition See=>dnsdbCommunity.go Line 13
-        	fetchPassiveTotal,
-        	//fetchDNSDB,
+		fetchPassiveTotal,
+		//fetchDNSDB,
 		fetchVirusTotal,
 		fetchFindSubDomains,
 		fetchUrlscan,
 		fetchBufferOverrun,
 	}
 
-    sources = toggleSources(override, sources)//Toogle Sources according flags
+	sources = toggleSources(override, sources)//Toogle Sources according flags
 	out := make(chan string)
 	var wg sync.WaitGroup
 
@@ -92,10 +92,8 @@ func main() {
 						continue
 					}
 					out <- n
-				}
-			}()
-		}
-	}
+				}}()
+		}}
 
 	// close the output channel when all the workers are done
 	go func() {
@@ -164,4 +162,3 @@ func fetchJSON(url string, wrapper interface{}) error {
 
 	return dec.Decode(wrapper)
 }
-
