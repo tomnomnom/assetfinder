@@ -39,7 +39,6 @@ func main() {
 	override["fetchBufferOverrun"]  = flag.Bool("b", cfg.Flags.BufferOverrun, "<Boolean>  Toggle BufferOverrun source")
 	flag.Parse()
 
-	fmt.Printf("%v",cfg)
 
 	var domains io.Reader
 	domains = os.Stdin
