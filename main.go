@@ -19,20 +19,21 @@ func main() {
     override := make(map[string]*bool)
 
 	flag.BoolVar(&subsOnly, "subs-only", false, "Only include subdomains of search domain")
-    // Flag for all Modules... Sorry Little messy
-    override["fetchCertSpotter"]    = flag.Bool("cert", true, "<Boolean> (Default = True) Toggle CertSpotter source")
-    override["fetchHackerTarget"]   = flag.Bool("h", true, "<Boolean> (Default = True) Toggle CertSpotter source")
-    override["fetchThreatCrowd"]    = flag.Bool("t", true, "<Boolean> (Default = True) Toggle ThreatCrowd source")
-    override["fetchCrtSh"]          = flag.Bool("crt", true, "<Boolean> (Default = True) Toggle CrtSh source")
-    override["fetchDNSDB"]          = flag.Bool("d", false, "<Boolean> (Default = True) Toggle DNSDB Enterprise source")
-    override["fetchDNSDBCommunity"] = flag.Bool("dC", true, "<Boolean> (Default = True) Toggle DNSDB Community source")
-    override["fetchFacebook"]       = flag.Bool("f", true, "<Boolean> (Default = True) Toggle Facebook source")
-    override["fetchPassiveTotal"]   = flag.Bool("p", true, "<Boolean> (Default = True) Toggle PassiveTotal source")
-    override["fetchWayback"]        = flag.Bool("w", false, "<Boolean> (Default = False)  Toggle Wayback source")
-    override["fetchVirusTotal"]     = flag.Bool("v", true, "<Boolean> (Default = True) Toggle VirusTotal source")
-    override["fetchFindSubDomains"] = flag.Bool("fs", true, "<Boolean> (Default = True) Toggle FindSubDomains source")
-    override["fetchUrlscan"]        = flag.Bool("u", true, "<Boolean> (Default = True) Toggle Urlscan source")
-    override["fetchBufferOverrun"]  = flag.Bool("b", true, "<Boolean> (Default = True) Toggle BufferOverrun source")
+
+	// Flag for all Modules... Sorry Little messy
+    	override["fetchCertSpotter"]    = flag.Bool("cert", true, "<Boolean>  Toggle CertSpotter source")
+    	override["fetchHackerTarget"]   = flag.Bool("ht", true, "<Boolean>  Toggle HackerTarget source")
+    	override["fetchThreatCrowd"]    = flag.Bool("t", true, "<Boolean>  Toggle ThreatCrowd source")
+    	override["fetchCrtSh"]          = flag.Bool("crt", true, "<Boolean>  Toggle CrtSh source")
+    	override["fetchDNSDB"]          = flag.Bool("d", false, "<Boolean>  Toggle DNSDB Enterprise source")
+    	override["fetchDNSDBCommunity"] = flag.Bool("dC", true, "<Boolean>  Toggle DNSDB Community source")
+    	override["fetchFacebook"]       = flag.Bool("f", true, "<Boolean>  Toggle Facebook source")
+    	override["fetchPassiveTotal"]   = flag.Bool("p", true, "<Boolean>  Toggle PassiveTotal source")
+    	override["fetchWayback"]        = flag.Bool("w", false, "<Boolean>  Toggle Wayback source")
+    	override["fetchVirusTotal"]     = flag.Bool("v", true, "<Boolean>  Toggle VirusTotal source")
+    	override["fetchFindSubDomains"] = flag.Bool("fs", true, "<Boolean>  Toggle FindSubDomains source")
+    	override["fetchUrlscan"]        = flag.Bool("u", true, "<Boolean>  Toggle Urlscan source")
+    	override["fetchBufferOverrun"]  = flag.Bool("b", true, "<Boolean>  Toggle BufferOverrun source")
 	flag.Parse()
 
 	var domains io.Reader
@@ -50,9 +51,9 @@ func main() {
 		fetchCrtSh,
 		fetchFacebook,
 		//fetchWayback, // A little too slow :(
-        fetchDNSDBCommunity, // Per Hour only 4 domains as Community Edition has limit of 25 query per hour and each domain takes 6 request for complete result for community edition See=>dnsdbCommunity.go Line 13
-        fetchPassiveTotal,
-        //fetchDNSDB,
+		fetchDNSDBCommunity, // Per Hour only 4 domains as Community Edition has limit of 25 query per hour and each domain takes 6 request for complete result for community edition See=>dnsdbCommunity.go Line 13
+        	fetchPassiveTotal,
+        	//fetchDNSDB,
 		fetchVirusTotal,
 		fetchFindSubDomains,
 		fetchUrlscan,
