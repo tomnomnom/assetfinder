@@ -85,6 +85,13 @@ func fetchDNSDB (domain string) ([]string, error){
         return []string{}, err
     }
     for _, objelement := range wrapper{
+	    if objelement.Obj.Rrtype == "CNAME" && !domainRepeatCheck[objelement.Obj.Rdata[0]]{
+		    domainRepeatCheck[objelement.Obj.Rdata[0]]= true
+
+		    tempvar := []byte(objelement.Obj.Rdata[0]) // Removing trailing '.' from subdomains Eg: "www.tesla.com."
+		    tempvar = tempvar[:len(tempvar)-2]  // Removing trailing '.' from subdomains Eg: "www.tesla.com."
+		    domains = append(domains,string(tempvar))
+	    }
             if domainRepeatCheck[objelement.Obj.Rrname]{
                 continue
             }
