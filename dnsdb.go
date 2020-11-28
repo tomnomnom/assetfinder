@@ -18,7 +18,9 @@ func getDNSDB (domain string) ([]byte, error){
     return formatJSON(body), nil
     }
 
-
+func clean (domain string)(string){			//Some Domains have wildcards like *.domain.tld / *.*.domain.tld
+	return strings.ReplaceAll(domain, "*.", "")
+}
 
 // Function to send Request to DNSDB
 func reqDNSDB (url string) (string,error) {
@@ -85,20 +87,21 @@ func fetchDNSDB (domain string) ([]string, error){
         return []string{}, err
     }
     for _, objelement := range wrapper{
-	    if objelement.Obj.Rrtype == "CNAME" && !domainRepeatCheck[objelement.Obj.Rdata[0]]{
-		    domainRepeatCheck[objelement.Obj.Rdata[0]]= true
+	    if objelement.Obj.Rrtype == "CNAME" && !domainRepeatCheck[clean(objelement.Obj.Rdata[0])]{
+		    domainRepeatCheck[clean(objelement.Obj.Rdata[0])]= true
 
-		    tempvar := []byte(objelement.Obj.Rdata[0]) // Removing trailing '.' from subdomains Eg: "www.tesla.com."
+		    tempvar := []byte(clean(objelement.Obj.Rdata[0])) // Removing trailing '.' from subdomains Eg: "www.tesla.com."
 		    tempvar = tempvar[:len(tempvar)-2]  // Removing trailing '.' from subdomains Eg: "www.tesla.com."
 		    domains = append(domains,string(tempvar))
 	    }
-            if domainRepeatCheck[objelement.Obj.Rrname]{
+            if domainRepeatCheck[clean(objelement.Obj.Rrname)]{
                 continue
             }
-            domainRepeatCheck[objelement.Obj.Rrname]= true
+            domainRepeatCheck[clean(objelement.Obj.Rrname)]= true
 
-            tempvar := []byte(objelement.Obj.Rrname) // Removing trailing '.' from subdomains Eg: "www.tesla.com."
+            tempvar := []byte(clean(objelement.Obj.Rrname)) // Removing trailing '.' from subdomains Eg: "www.tesla.com."
             tempvar = tempvar[:len(tempvar)-2]  // Removing trailing '.' from subdomains Eg: "www.tesla.com."
-            domains = append(domains,string(tempvar))        }
+            domains = append(domains,string(tempvar))
+	}
     return domains, nil
 }
