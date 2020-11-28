@@ -14,10 +14,31 @@ import (
 	"time"
 )
 
+var cfg Config
+
 func main() {
 	var subsOnly bool
-	flag.BoolVar(&subsOnly, "subs-only", false, "Only include subdomains of search domain")
+	override := make(map[string]*bool)
+	cfg.ymlparser()
+
+	flag.BoolVar(&subsOnly, "subs-only", cfg.Flags.SubsOnly, "Only include subdomains of search domain")
+
+	// Flag for all Modules... Sorry Little messy
+	override["fetchCertSpotter"]    = flag.Bool("cert", cfg.Flags.CertSpotter, "<Boolean>  Toggle CertSpotter source")
+	override["fetchHackerTarget"]   = flag.Bool("ht", cfg.Flags.HackerTarget, "<Boolean>  Toggle HackerTarget source")
+	override["fetchThreatCrowd"]    = flag.Bool("t", cfg.Flags.ThreatCrowd, "<Boolean>  Toggle ThreatCrowd source")
+	override["fetchCrtSh"]          = flag.Bool("crt", cfg.Flags.CrtSh, "<Boolean>  Toggle CrtSh source")
+	override["fetchDNSDB"]          = flag.Bool("d", cfg.Flags.DNSDB, "<Boolean>  Toggle DNSDB Enterprise source")
+	override["fetchDNSDBCommunity"] = flag.Bool("dC", cfg.Flags.DNSDBCommunity, "<Boolean>  Toggle DNSDB Community source")
+	override["fetchFacebook"]       = flag.Bool("f", cfg.Flags.Facebook, "<Boolean>  Toggle Facebook source")
+	override["fetchPassiveTotal"]   = flag.Bool("p", cfg.Flags.PassiveTotal, "<Boolean>  Toggle PassiveTotal source")
+	override["fetchWayback"]        = flag.Bool("w", cfg.Flags.Wayback, "<Boolean>  Toggle Wayback source")
+	override["fetchVirusTotal"]     = flag.Bool("v", cfg.Flags.VirusTotal, "<Boolean>  Toggle VirusTotal source")
+	override["fetchFindSubDomains"] = flag.Bool("fs", cfg.Flags.FindSubDomains, "<Boolean>  Toggle FindSubDomains source")
+	override["fetchUrlscan"]        = flag.Bool("u", cfg.Flags.Urlscan, "<Boolean>  Toggle Urlscan source")
+	override["fetchBufferOverrun"]  = flag.Bool("b", cfg.Flags.BufferOverrun, "<Boolean>  Toggle BufferOverrun source")
 	flag.Parse()
+
 
 	var domains io.Reader
 	domains = os.Stdin
@@ -34,12 +55,16 @@ func main() {
 		fetchCrtSh,
 		fetchFacebook,
 		//fetchWayback, // A little too slow :(
+		fetchDNSDBCommunity, // Per Hour only 4 domains as Community Edition has limit of 25 query per hour and each domain takes 6 request for complete result for community edition See=>dnsdbCommunity.go Line 13
+		fetchPassiveTotal,
+		//fetchDNSDB,
 		fetchVirusTotal,
 		fetchFindSubDomains,
 		fetchUrlscan,
 		fetchBufferOverrun,
 	}
 
+	sources = toggleSources(override, sources)//Toogle Sources according flags
 	out := make(chan string)
 	var wg sync.WaitGroup
 
@@ -71,10 +96,8 @@ func main() {
 						continue
 					}
 					out <- n
-				}
-			}()
-		}
-	}
+				}}()
+		}}
 
 	// close the output channel when all the workers are done
 	go func() {

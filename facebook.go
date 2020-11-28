@@ -5,13 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-	"os"
 )
 
 func fetchFacebook(domain string) ([]string, error) {
 
-	appId := os.Getenv("FB_APP_ID")
-	appSecret := os.Getenv("FB_APP_SECRET")
+	appId := cfg.Credentials.Facebook.APPID
+	appSecret := cfg.Credentials.Facebook.AppSecret
 	if appId == "" || appSecret == "" {
 		// fail silently because it's reasonable not to have
 		// the Facebook API creds

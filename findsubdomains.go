@@ -2,11 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
 )
 
-var apiToken = os.Getenv("SPYSE_API_TOKEN")
-
+var apiToken = cfg.Credentials.FindSubDomains.APIToken
 func callSubdomainsAggregateEndpoint(domain string) []string {
 	out := make([]string, 0)
 
@@ -101,7 +99,7 @@ func fetchFindSubDomains(domain string) ([]string, error) {
 
 	out := make([]string, 0)
 
-	apiToken := os.Getenv("SPYSE_API_TOKEN")
+	apiToken := cfg.Credentials.FindSubDomains.APIToken 
 	if apiToken == "" {
 		// Must have an API token
 		return []string{}, nil

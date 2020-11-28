@@ -9,6 +9,8 @@ If you have Go installed and configured (i.e. with `$GOPATH/bin` in your `$PATH`
 
 ```
 go get -u github.com/tomnomnom/assetfinder
+mkdir ~/.config/assetfinder
+curl https://raw.githubusercontent.com/tomnomnom/assetfinder/master/config.yml > ~/.config/assetfinder/config.yml
 ```
 
 Otherwise [download a release for your platform](https://github.com/tomnomnom/assetfinder/releases).
