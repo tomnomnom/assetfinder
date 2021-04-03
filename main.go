@@ -9,6 +9,8 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"reflect"
+	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -16,8 +18,12 @@ import (
 
 func main() {
 	var subsOnly bool
+	var excludedSourcesString string
+	flag.StringVar(&excludedSourcesString, "not-from", "", "Don't fetch results from the specified sources (comma-separated if multiple).")
 	flag.BoolVar(&subsOnly, "subs-only", false, "Only include subdomains of search domain")
 	flag.Parse()
+
+	excludedSources := strings.Split(excludedSourcesString, ",")
 
 	var domains io.Reader
 	domains = os.Stdin
@@ -51,6 +57,17 @@ func main() {
 
 		// call each of the source workers in a goroutine
 		for _, source := range sources {
+
+			// Obtain the pointer to the source function using run-time reflection.
+			sourcePointer := runtime.FuncForPC(reflect.ValueOf(source).Pointer())
+			// Save the function's lowercase name, ignoring the first 10 elements
+			// (main.fetchXSource becomes xsource).
+			sourceName := strings.ToLower(sourcePointer.Name())[10:]
+
+			if isExcluded(excludedSources, sourceName) {
+				continue
+			}
+
 			wg.Add(1)
 			fn := source
 
@@ -142,4 +159,13 @@ func fetchJSON(url string, wrapper interface{}) error {
 	dec := json.NewDecoder(resp.Body)
 
 	return dec.Decode(wrapper)
+}
+
+func isExcluded(excludedSources []string, excluded string) bool {
+	for _, s := range excludedSources {
+		if strings.ToLower(s) == excluded {
+			return true
+		}
+	}
+	return false
 }
