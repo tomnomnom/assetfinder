@@ -14,8 +14,15 @@ import (
 	"time"
 )
 
+var subsOnly bool
+
+type Result struct {
+	n      string
+	domain string
+}
+
 func main() {
-	var subsOnly bool
+
 	flag.BoolVar(&subsOnly, "subs-only", false, "Only include subdomains of search domain")
 	flag.Parse()
 
@@ -33,14 +40,15 @@ func main() {
 		fetchThreatCrowd,
 		fetchCrtSh,
 		fetchFacebook,
-		//fetchWayback, // A little too slow :(
+		// fetchWayback, // A little too slow :(
 		fetchVirusTotal,
 		fetchFindSubDomains,
 		fetchUrlscan,
 		fetchBufferOverrun,
 	}
 
-	out := make(chan string)
+	out := make(chan Result)
+
 	var wg sync.WaitGroup
 
 	sc := bufio.NewScanner(domains)
@@ -61,19 +69,26 @@ func main() {
 				names, err := fn(domain)
 
 				if err != nil {
-					//fmt.Fprintf(os.Stderr, "err: %s\n", err)
 					return
 				}
 
 				for _, n := range names {
+
 					n = cleanDomain(n)
-					if subsOnly && !strings.HasSuffix(n, domain) {
-						continue
-					}
-					out <- n
+
+					res := new(Result)
+					res.n = n
+					res.domain = domain
+					
+					out <- *res
 				}
+
 			}()
 		}
+	}
+
+	if err := sc.Err(); err != nil {
+		fmt.Println(err)
 	}
 
 	// close the output channel when all the workers are done
@@ -85,13 +100,23 @@ func main() {
 	// track what we've already printed to avoid duplicates
 	printed := make(map[string]bool)
 
-	for n := range out {
-		if _, ok := printed[n]; ok {
+	for res := range out {
+
+		if _, ok := printed[res.n]; ok {
 			continue
 		}
-		printed[n] = true
 
-		fmt.Println(n)
+		/*
+			moved this check to here as there appeared to be
+			an issue where non subdomains were being returned
+			if this check was in the go routine
+		*/
+		if subsOnly && !strings.HasSuffix(res.n, res.domain) {
+			continue
+		}
+
+		fmt.Println(res.n)
+		printed[res.n] = true
 	}
 }
 
@@ -121,11 +146,11 @@ func cleanDomain(d string) string {
 		return d
 	}
 
-	if d[0] == '*' || d[0] == '%' {
+	if strings.HasPrefix(d, "*") || strings.HasPrefix(d, "%") {
 		d = d[1:]
 	}
 
-	if d[0] == '.' {
+	if strings.HasPrefix(d, ".") {
 		d = d[1:]
 	}
 
