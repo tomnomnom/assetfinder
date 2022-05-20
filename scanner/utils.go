@@ -24,7 +24,7 @@ func httpGet(url string) ([]byte, error) {
 	return raw, nil
 }
 
-func cleanDomain(d string) string {
+func CleanDomain(d string) string {
 	d = strings.ToLower(d)
 
 	// no idea what this is, but we can't clean it ¯\_(ツ)_/¯
