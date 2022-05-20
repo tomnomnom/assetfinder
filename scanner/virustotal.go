@@ -1,11 +1,11 @@
-package main
+package scanner
 
 import (
 	"fmt"
 	"os"
 )
 
-func fetchVirusTotal(domain string) ([]string, error) {
+func VirusTotal(domain string) ([]string, error) {
 
 	apiKey := os.Getenv("VT_API_KEY")
 	if apiKey == "" {

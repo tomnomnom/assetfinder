@@ -1,11 +1,11 @@
-package main
+package scanner
 
 import (
 	"fmt"
 	"net/url"
 )
 
-func fetchWayback(domain string) ([]string, error) {
+func Wayback(domain string) ([]string, error) {
 
 	fetchURL := fmt.Sprintf("http://web.archive.org/cdx/search/cdx?url=*.%s/*&output=json&collapse=urlkey", domain)
 

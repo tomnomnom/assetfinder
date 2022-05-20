@@ -12,6 +12,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+    "github.com/spiral-sec/assetfinder/scanner"
 )
 
 func main() {
@@ -28,23 +29,23 @@ func main() {
 	}
 
 	sources := []fetchFn{
-		fetchCertSpotter,
-		fetchHackerTarget,
-		fetchThreatCrowd,
-		fetchCrtSh,
-		fetchFacebook,
-		//fetchWayback, // A little too slow :(
-		fetchVirusTotal,
-		fetchFindSubDomains,
-		fetchUrlscan,
-		fetchBufferOverrun,
+		scanner.CertSpotter,
+		scanner.HackerTarget,
+		scanner.ThreatCrowd,
+		scanner.CrtSh,
+		scanner.Facebook,
+		//scanner.Wayback, // A little too slow :(
+		scanner.VirusTotal,
+		scanner.FindSubDomains,
+		scanner.Urlscan,
+		scanner.BufferOverrun,
 	}
 
 	out := make(chan string)
 	var wg sync.WaitGroup
 
 	sc := bufio.NewScanner(domains)
-	rl := newRateLimiter(time.Second)
+	rl := scanner.NewRateLimiter(time.Second)
 
 	for sc.Scan() {
 		domain := strings.ToLower(sc.Text())

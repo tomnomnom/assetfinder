@@ -1,10 +1,10 @@
-package main
+package scanner
 
 import (
 	"fmt"
 )
 
-func fetchCertSpotter(domain string) ([]string, error) {
+func CertSpotter(domain string) ([]string, error) {
 	out := make([]string, 0)
 
 	fetchURL := fmt.Sprintf("https://certspotter.com/api/v0/certs?domain=%s", domain)

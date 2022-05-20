@@ -1,4 +1,4 @@
-package main
+package scanner
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func fetchFacebook(domain string) ([]string, error) {
+func Facebook(domain string) ([]string, error) {
 
 	appId := os.Getenv("FB_APP_ID")
 	appSecret := os.Getenv("FB_APP_SECRET")
