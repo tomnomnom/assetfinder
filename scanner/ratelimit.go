@@ -1,4 +1,4 @@
-package main
+package scanner
 
 import (
 	"sync"
@@ -16,7 +16,7 @@ type rateLimiter struct {
 
 // newRateLimiter returns a new *rateLimiter for the
 // provided delay
-func newRateLimiter(delay time.Duration) *rateLimiter {
+func NewRateLimiter(delay time.Duration) *rateLimiter {
 	return &rateLimiter{
 		delay: delay,
 		ops:   make(map[string]time.Time),

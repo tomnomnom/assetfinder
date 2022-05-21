@@ -1,4 +1,4 @@
-package main
+package scanner
 
 import (
 	"encoding/json"
@@ -11,7 +11,7 @@ type CrtShResult struct {
 	Name string `json:"name_value"`
 }
 
-func fetchCrtSh(domain string) ([]string, error) {
+func CrtSh(domain string) ([]string, error) {
 	var results []CrtShResult
 
 	resp, err := http.Get(

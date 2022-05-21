@@ -2,16 +2,14 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
-	"io/ioutil"
-	"net/http"
 	"os"
 	"strings"
 	"sync"
 	"time"
+    "github.com/spiral-sec/assetfinder/scanner"
 )
 
 func main() {
@@ -28,23 +26,23 @@ func main() {
 	}
 
 	sources := []fetchFn{
-		fetchCertSpotter,
-		fetchHackerTarget,
-		fetchThreatCrowd,
-		fetchCrtSh,
-		fetchFacebook,
-		//fetchWayback, // A little too slow :(
-		fetchVirusTotal,
-		fetchFindSubDomains,
-		fetchUrlscan,
-		fetchBufferOverrun,
+		scanner.CertSpotter,
+		scanner.HackerTarget,
+		scanner.ThreatCrowd,
+		scanner.CrtSh,
+		scanner.Facebook,
+		//scanner.Wayback, // A little too slow :(
+		scanner.VirusTotal,
+		scanner.FindSubDomains,
+		scanner.Urlscan,
+		scanner.BufferOverrun,
 	}
 
 	out := make(chan string)
 	var wg sync.WaitGroup
 
 	sc := bufio.NewScanner(domains)
-	rl := newRateLimiter(time.Second)
+	rl := scanner.NewRateLimiter(time.Second)
 
 	for sc.Scan() {
 		domain := strings.ToLower(sc.Text())
@@ -66,7 +64,7 @@ func main() {
 				}
 
 				for _, n := range names {
-					n = cleanDomain(n)
+					n = scanner.CleanDomain(n)
 					if subsOnly && !strings.HasSuffix(n, domain) {
 						continue
 					}
@@ -97,49 +95,3 @@ func main() {
 
 type fetchFn func(string) ([]string, error)
 
-func httpGet(url string) ([]byte, error) {
-	res, err := http.Get(url)
-	if err != nil {
-		return []byte{}, err
-	}
-
-	raw, err := ioutil.ReadAll(res.Body)
-
-	res.Body.Close()
-	if err != nil {
-		return []byte{}, err
-	}
-
-	return raw, nil
-}
-
-func cleanDomain(d string) string {
-	d = strings.ToLower(d)
-
-	// no idea what this is, but we can't clean it ¯\_(ツ)_/¯
-	if len(d) < 2 {
-		return d
-	}
-
-	if d[0] == '*' || d[0] == '%' {
-		d = d[1:]
-	}
-
-	if d[0] == '.' {
-		d = d[1:]
-	}
-
-	return d
-
-}
-
-func fetchJSON(url string, wrapper interface{}) error {
-	resp, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	dec := json.NewDecoder(resp.Body)
-
-	return dec.Decode(wrapper)
-}

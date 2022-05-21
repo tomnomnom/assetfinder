@@ -1,4 +1,4 @@
-package main
+package scanner
 
 import (
 	"fmt"
@@ -97,7 +97,7 @@ func callSubdomainsEndpoint(domain string) []string {
 	return out
 }
 
-func fetchFindSubDomains(domain string) ([]string, error) {
+func FindSubDomains(domain string) ([]string, error) {
 
 	out := make([]string, 0)
 

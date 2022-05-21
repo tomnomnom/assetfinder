@@ -1,4 +1,4 @@
-package main
+package scanner
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 	"net/url"
 )
 
-func fetchUrlscan(domain string) ([]string, error) {
+func Urlscan(domain string) ([]string, error) {
 	resp, err := http.Get(
 		fmt.Sprintf("https://urlscan.io/api/v1/search/?q=domain:%s", domain),
 	)

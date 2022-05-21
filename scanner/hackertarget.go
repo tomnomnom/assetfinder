@@ -1,4 +1,4 @@
-package main
+package scanner
 
 import (
 	"bufio"
@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func fetchHackerTarget(domain string) ([]string, error) {
+func HackerTarget(domain string) ([]string, error) {
 	out := make([]string, 0)
 
 	raw, err := httpGet(
