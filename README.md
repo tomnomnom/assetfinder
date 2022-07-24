@@ -9,6 +9,10 @@ If you have Go installed and configured (i.e. with `$GOPATH/bin` in your `$PATH`
 
 ```
 go get -u github.com/tomnomnom/assetfinder
+
+For latest installed go version use:
+
+go install github.com/tomnomnom/assetfinder@latest
 ```
 
 Otherwise [download a release for your platform](https://github.com/tomnomnom/assetfinder/releases).
