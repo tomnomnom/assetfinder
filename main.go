@@ -40,11 +40,12 @@ func main() {
 		fetchThreatCrowd,
 		fetchCrtSh,
 		fetchFacebook,
-		// fetchWayback, // A little too slow :(
+		fetchWayback, // A little too slow :(
 		fetchVirusTotal,
 		fetchFindSubDomains,
 		fetchUrlscan,
 		fetchBufferOverrun,
+		fetchRiskIq,
 	}
 
 	out := make(chan Result)
@@ -79,7 +80,7 @@ func main() {
 					res := new(Result)
 					res.n = n
 					res.domain = domain
-					
+
 					out <- *res
 				}
 
