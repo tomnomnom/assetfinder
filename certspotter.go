@@ -7,7 +7,7 @@ import (
 func fetchCertSpotter(domain string) ([]string, error) {
 	out := make([]string, 0)
 
-	fetchURL := fmt.Sprintf("https://certspotter.com/api/v1/certs?domain=%s", domain)
+	fetchURL := fmt.Sprintf("https://certspotter.com/v1/certs?domain=%s", domain)
 
 	wrapper := []struct {
 		DNSNames []string `json:"dns_names"`
