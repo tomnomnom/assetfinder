@@ -30,6 +30,7 @@ Please feel free to issue pull requests with new sources! :)
 * hackertarget
 * threatcrowd
 * wayback machine
+    * Need to use the `-w` flag to enable this as it sometimes is quite slow.
 * dns.bufferover.run
 * facebook
     * Needs `FB_APP_ID` and `FB_APP_SECRET` environment variables set (https://developers.facebook.com/)
@@ -38,15 +39,17 @@ Please feel free to issue pull requests with new sources! :)
     * Needs `VT_API_KEY` environment variable set (https://developers.virustotal.com/reference)
 * findsubdomains
     * Needs `SPYSE_API_TOKEN` environment variable set (the free version always gives the first response page, and you also get "25 unlimited requests") — (https://spyse.com/apidocs)
+* riddler.io
+    * Needs `RIDDLER_EMAIL` and `RIDDLER_PASS` environment variables to be set (https://riddler.io/)
 
 ### Sources to be implemented
-* http://api.passivetotal.org/api/docs/
-* https://community.riskiq.com/ (?)
-* https://riddler.io/
+* ~~http://api.passivetotal.org/api/docs/~~
+* ~~https://community.riskiq.com/~~
+* ~~https://riddler.io/~~
 * http://www.dnsdb.org/
 * https://certdb.com/api-documentation
 
 ## TODO
 * Flags to control which sources are used
     * Likely to be all on by default and a flag to disable
-* Read domains from stdin
+* ~~Read domains from stdin~~

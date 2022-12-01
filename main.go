@@ -44,7 +44,7 @@ func main() {
 		fetchFacebook,
 		// fetchWayback, // A little too slow :(
 		fetchVirusTotal,
-		fetchFindSubDomains,
+		// fetchFindSubDomains,
 		fetchUrlscan,
 		fetchBufferOverrun,
 		fetchRiskIq,
