@@ -37,8 +37,8 @@ Please feel free to issue pull requests with new sources! :)
     * You need to be careful with your app's rate limits
 * virustotal
     * Needs `VT_API_KEY` environment variable set (https://developers.virustotal.com/reference)
-* ~~findsubdomains
-    * Needs `SPYSE_API_TOKEN` environment variable set (the free version always gives the first response page, and you also get "25 unlimited requests") — (https://spyse.com/apidocs)~~
+* ~~findsubdomains~~
+    * ~~Needs `SPYSE_API_TOKEN` environment variable set (the free version always gives the first response page, and you also get "25 unlimited requests") — (https://spyse.com/apidocs)~~
 * riddler.io
     * Needs `RIDDLER_EMAIL` and `RIDDLER_PASS` environment variables to be set (https://riddler.io/)
 
