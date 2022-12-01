@@ -52,8 +52,8 @@ func callSubdomainsAggregateEndpoint(domain string) []string {
 	return out
 }
 
-/**
-
+/*
+*
  */
 func callSubdomainsEndpoint(domain string) []string {
 	out := make([]string, 0)

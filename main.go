@@ -48,6 +48,7 @@ func main() {
 		fetchUrlscan,
 		fetchBufferOverrun,
 		fetchRiskIq,
+		fetchRiddler,
 	}
 
 	// optional add in wayback
