@@ -15,6 +15,7 @@ import (
 )
 
 var subsOnly bool
+var wayBack bool
 
 type Result struct {
 	n      string
@@ -24,6 +25,7 @@ type Result struct {
 func main() {
 
 	flag.BoolVar(&subsOnly, "subs-only", false, "Only include subdomains of search domain")
+	flag.BoolVar(&wayBack, "w", false, "Include a search of the Wayback Machine...slow")
 	flag.Parse()
 
 	var domains io.Reader
@@ -40,12 +42,17 @@ func main() {
 		fetchThreatCrowd,
 		fetchCrtSh,
 		fetchFacebook,
-		fetchWayback, // A little too slow :(
+		// fetchWayback, // A little too slow :(
 		fetchVirusTotal,
 		fetchFindSubDomains,
 		fetchUrlscan,
 		fetchBufferOverrun,
 		fetchRiskIq,
+	}
+
+	// optional add in wayback
+	if wayBack {
+		sources = append(sources, fetchWayback)
 	}
 
 	out := make(chan Result)
