@@ -1,3 +1,3 @@
-module github.com/tomnomnom/assetfinder
+module github.com/cybercdh/assetfinder
 
 go 1.19
