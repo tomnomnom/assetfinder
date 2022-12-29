@@ -49,6 +49,7 @@ func main() {
 		fetchBufferOverrun,
 		fetchRiskIq,
 		fetchRiddler,
+		fetchDnsSpy,
 	}
 
 	// optional add in wayback
