@@ -50,6 +50,7 @@ func main() {
 		fetchRiskIq,
 		fetchRiddler,
 		fetchDnsSpy,
+		fetchAlienVault,
 	}
 
 	// optional add in wayback
