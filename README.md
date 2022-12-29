@@ -25,6 +25,7 @@ assetfinder [--subs-only] <domain>
 Please feel free to issue pull requests with new sources! :)
 
 ### Implemented
+* AlienVault
 * dnsspy.io
 * crt.sh
 * certspotter
