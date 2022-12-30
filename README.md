@@ -25,6 +25,7 @@ assetfinder [--subs-only] <domain>
 Please feel free to issue pull requests with new sources! :)
 
 ### Implemented
+* jldc.me
 * dnshistory.org
 * Arquivo
 * Maltiverse

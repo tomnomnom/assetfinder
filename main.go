@@ -54,6 +54,7 @@ func main() {
 		fetchMaltiverse,
 		fetchArquivo,
 		fetchDnsHistory,
+		fetchJldc,
 	}
 
 	// optional add in wayback
