@@ -53,6 +53,7 @@ func main() {
 		fetchAlienVault,
 		fetchMaltiverse,
 		fetchArquivo,
+		fetchDnsHistory,
 	}
 
 	// optional add in wayback
