@@ -1,3 +1,6 @@
+/*
+spyse has shut down as of March 2022
+*/
 package main
 
 import (

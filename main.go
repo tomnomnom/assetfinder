@@ -15,17 +15,27 @@ import (
 )
 
 var subsOnly bool
+var verbose bool
 var wayBack bool
 
 type Result struct {
 	n      string
 	domain string
+	src    string
+}
+
+type fetchFn func(string) ([]string, error)
+
+type fetchSource struct {
+	name string
+	fn   fetchFn
 }
 
 func main() {
 
 	flag.BoolVar(&subsOnly, "subs-only", false, "Only include subdomains of search domain")
 	flag.BoolVar(&wayBack, "w", false, "Include a search of the Wayback Machine...slow")
+	flag.BoolVar(&verbose, "v", false, "Be verbose, and show the source of the subdomain in the output")
 	flag.Parse()
 
 	var domains io.Reader
@@ -36,30 +46,28 @@ func main() {
 		domains = strings.NewReader(domain)
 	}
 
-	sources := []fetchFn{
-		fetchCertSpotter,
-		fetchHackerTarget,
-		fetchThreatCrowd,
-		fetchCrtSh,
-		fetchFacebook,
-		// fetchWayback, // A little too slow :(
-		fetchVirusTotal,
-		// fetchFindSubDomains,
-		fetchUrlscan,
-		fetchBufferOverrun,
-		fetchRiskIq,
-		fetchRiddler,
-		fetchDnsSpy,
-		fetchAlienVault,
-		fetchMaltiverse,
-		fetchArquivo,
-		fetchDnsHistory,
-		fetchJldc,
+	sources := []fetchSource{
+		{"Certspotter", fetchCertSpotter},
+		{"HackerTarget", fetchHackerTarget},
+		{"ThreatCrowd", fetchThreatCrowd},
+		{"crt.sh", fetchCrtSh},
+		{"Facebook", fetchFacebook},
+		{"VirusTotal", fetchVirusTotal},
+		{"UrlScan", fetchUrlscan},
+		{"BufferOverrun", fetchBufferOverrun},
+		{"RiskIq", fetchRiskIq},
+		{"Riddler", fetchRiddler},
+		{"DnsSpy", fetchDnsSpy},
+		{"AlienVault", fetchAlienVault},
+		{"Maltiverse", fetchMaltiverse},
+		{"Arquivo", fetchArquivo},
+		{"DnsHistory", fetchDnsHistory},
+		{"Jldc", fetchJldc},
 	}
 
 	// optional add in wayback
 	if wayBack {
-		sources = append(sources, fetchWayback)
+		sources = append(sources, fetchSource{"Wayback", fetchWayback})
 	}
 
 	out := make(chan Result)
@@ -75,7 +83,7 @@ func main() {
 		// call each of the source workers in a goroutine
 		for _, source := range sources {
 			wg.Add(1)
-			fn := source
+			fn := source.fn
 
 			go func() {
 				defer wg.Done()
@@ -88,18 +96,18 @@ func main() {
 				}
 
 				for _, n := range names {
-
 					n = cleanDomain(n)
 
 					res := new(Result)
 					res.n = n
 					res.domain = domain
+					res.src = source.name // Use the name of the source
 
 					out <- *res
 				}
-
 			}()
 		}
+
 	}
 
 	if err := sc.Err(); err != nil {
@@ -130,12 +138,16 @@ func main() {
 			continue
 		}
 
-		fmt.Println(res.n)
+		if verbose {
+			fmt.Printf("%s,%s\n", res.src, res.n)
+
+		} else {
+			fmt.Println(res.n)
+		}
+
 		printed[res.n] = true
 	}
 }
-
-type fetchFn func(string) ([]string, error)
 
 func httpGet(url string) ([]byte, error) {
 	res, err := http.Get(url)
