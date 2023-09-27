@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 type CrtShResult struct {
@@ -31,7 +32,24 @@ func fetchCrtSh(domain string) ([]string, error) {
 	}
 
 	for _, res := range results {
-		output = append(output, res.Name)
+
+		/*
+			results from crt.sh could product multiple
+			hits in name_value field which are separated by a \n
+			this then prints these values out which don't
+			go through cleanDomain, e.g.
+			"*.qa-release.yhs.search.yahoo.com\n*.qa-trunk.yhs.search.yahoo.com"
+			will return
+			"qa-release.yhs.search.yahoo.com
+			*.qa-trunk.yhs.search.yahoo.com"
+
+			using strings.Fields separates on newline and iterating each result to return
+			cures this issue
+		*/
+		s := strings.Fields(res.Name)
+		for _, element := range s {
+			output = append(output, element)
+		}
 	}
 	return output, nil
 }

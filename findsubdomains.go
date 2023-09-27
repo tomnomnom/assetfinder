@@ -1,3 +1,6 @@
+/*
+spyse has shut down as of March 2022
+*/
 package main
 
 import (
@@ -52,8 +55,8 @@ func callSubdomainsAggregateEndpoint(domain string) []string {
 	return out
 }
 
-/**
-
+/*
+*
  */
 func callSubdomainsEndpoint(domain string) []string {
 	out := make([]string, 0)
