@@ -67,7 +67,7 @@ func main() {
 
 				for _, n := range names {
 					n = cleanDomain(n)
-					if subsOnly && !strings.HasSuffix(n, domain) {
+					if subsOnly && !strings.HasSuffix(n, "."+domain) {
 						continue
 					}
 					out <- n
