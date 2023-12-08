@@ -5,10 +5,10 @@ Find domains and subdomains potentially related to a given domain.
 
 ## Install
 
-If you have Go installed and configured (i.e. with `$GOPATH/bin` in your `$PATH`):
+If you have latest version of Go installed and configured (i.e. with `$GOPATH/bin` in your `$PATH`):
 
 ```
-go get -u github.com/tomnomnom/assetfinder
+go install github.com/tomnomnom/assetfinder@latest
 ```
 
 Otherwise [download a release for your platform](https://github.com/tomnomnom/assetfinder/releases).
